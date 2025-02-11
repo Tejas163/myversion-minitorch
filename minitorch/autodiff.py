@@ -23,7 +23,16 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
     # TODO: Implement for Task 1.1.
-    raise NotImplementedError('Need to implement for Task 1.1')
+    # Hint: Use the central difference formula.
+    val_plus_epsilon = list(vals)
+    val_minus_epsilon = list(vals)
+    val_plus_epsilon[arg] += epsilon
+    val_minus_epsilon[arg] -= epsilon
+    derivative = (f(*val_plus_epsilon) - f(*val_minus_epsilon)) / (2 * epsilon)
+    return derivative
+
+
+
 
 
 variable_count = 1
@@ -31,7 +40,12 @@ variable_count = 1
 
 class Variable(Protocol):
     def accumulate_derivative(self, x: Any) -> None:
-        pass
+        der = getattr(self, "_derivative", None)
+        if der is not None:
+            self._derivative = der + x
+        else:
+            self._derivative = x
+
 
     @property
     def unique_id(self) -> int:
